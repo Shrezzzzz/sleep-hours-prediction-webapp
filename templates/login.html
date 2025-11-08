@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login - Sleep Time Predictor</title>
+  <style>
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(180deg, #fefbf8 0%, #f3e9e0 100%);
+      color: #4b3f35;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .login-container {
+      background: #fff;
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+      width: 360px;
+      text-align: center;
+      animation: fadeIn 0.5s ease-in;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h2 {
+      color: #5c4033;
+      margin-bottom: 20px;
+      font-size: 1.8em;
+    }
+
+    input[type="text"], input[type="password"] {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: 2px solid #e8ded5;
+      border-radius: 12px;
+      background: #fefbf8;
+      font-size: 1em;
+      transition: 0.3s;
+    }
+
+    input[type="text"]:focus, input[type="password"]:focus {
+      border-color: #b48a68;
+      outline: none;
+      box-shadow: 0 0 5px rgba(180,138,104,0.3);
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #5c4033;
+      color: white;
+      border: none;
+      border-radius: 30px;
+      font-size: 1.05em;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 15px;
+      transition: all 0.3s ease;
+    }
+
+    button:hover {
+      background: #7a523b;
+      transform: translateY(-3px);
+    }
+
+    p {
+      margin-top: 15px;
+      font-size: 0.9em;
+    }
+
+    a {
+      color: #8b5e3c;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <h2>Welcome 🌚</h2>
+    <form method="post" action="{{ url_for('login') }}">
+      <input type="text" name="username" placeholder="Enter Username" required />
+      <input type="password" name="password" placeholder="Enter Password" required />
+      <button type="submit">Login</button>
+    </form>
+    <p>Don't have an account? <a href="{{ url_for('signup') }}">Sign up</a></p>
+  </div>
+</body>
+</html>

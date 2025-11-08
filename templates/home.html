@@ -1,0 +1,356 @@
+ <!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sleep Hours Prediction</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #f8f3ee 0%, #ede1d0 100%);
+      min-height: 100vh;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .container {
+      max-width: 600px;
+      width: 100%;
+      background: #fffaf5;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(92, 64, 51, 0.15);
+      padding: 40px;
+      animation: fadeIn 0.5s ease-in;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 3px solid #a17852;
+    }
+
+    h1 {
+      color: #5c4033;
+      font-size: 2.2em;
+      margin-bottom: 10px;
+      text-shadow: 2px 2px 4px rgba(92, 64, 51, 0.1);
+    }
+
+    .subtitle {
+      color: #7c6654;
+      font-size: 1em;
+      margin-top: 10px;
+    }
+
+    .emoji-icon {
+      font-size: 3em;
+      margin-bottom: 10px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    label {
+      color: #3b2f2f;
+      font-weight: 600;
+      font-size: 0.95em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    label::before {
+      content: "📌";
+      font-size: 1.2em;
+    }
+
+    input[type="number"] {
+      padding: 12px 15px;
+      border: 2px solid #e2d5c3;
+      border-radius: 10px;
+      font-size: 1em;
+      transition: all 0.3s ease;
+      background: #fdf8f3;
+    }
+
+    input[type="number"]:focus {
+      outline: none;
+      border-color: #a17852;
+      background: white;
+      box-shadow: 0 0 0 3px rgba(161, 120, 82, 0.15);
+    }
+
+    input[type="number"]:hover {
+      border-color: #a17852;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 15px;
+      margin-top: 10px;
+    }
+
+    input[type="submit"],
+    .btn {
+      flex: 1;
+      padding: 15px 30px;
+      background: linear-gradient(135deg, #a17852 0%, #5c4033 100%);
+      color: white;
+      border: none;
+      border-radius: 50px;
+      font-size: 1.1em;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 5px 15px rgba(92, 64, 51, 0.25);
+      text-decoration: none;
+      display: inline-block;
+      text-align: center;
+    }
+
+    input[type="submit"]:hover,
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(92, 64, 51, 0.3);
+    }
+
+    input[type="submit"]:active,
+    .btn:active {
+      transform: translateY(-1px);
+    }
+
+    .result {
+      margin-top: 30px;
+      padding: 25px;
+      background: linear-gradient(135deg, #b8926b 0%, #8b6e56 100%);
+      color: white;
+      border-radius: 15px;
+      text-align: center;
+      font-size: 1.3em;
+      font-weight: 600;
+      box-shadow: 0 10px 30px rgba(161, 120, 82, 0.25);
+      animation: slideIn 0.5s ease-out;
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .dashboard-link {
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    .dashboard-link a {
+      color: #5c4033;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1.1em;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border-radius: 10px;
+      transition: all 0.3s ease;
+    }
+
+    .dashboard-link a:hover {
+      background: #f5e9da;
+      transform: translateX(5px);
+    }
+
+    .dashboard-link a::before {
+      content: "📊";
+      font-size: 1.3em;
+    }
+
+    .info-cards {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+      margin-bottom: 30px;
+    }
+
+    .info-card {
+      background: #fdf8f3;
+      padding: 15px;
+      border-radius: 10px;
+      text-align: center;
+      border: 2px solid #e2d5c3;
+    }
+
+    .info-card-icon {
+      font-size: 2em;
+      margin-bottom: 5px;
+    }
+
+    .info-card-text {
+      color: #7c6654;
+      font-size: 0.85em;
+      font-weight: 500;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 25px;
+      }
+
+      h1 {
+        font-size: 1.8em;
+      }
+
+      .info-cards {
+        grid-template-columns: 1fr;
+      }
+
+      .button-group {
+        flex-direction: column;
+      }
+    }
+  </style>
+
+
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <div class="emoji-icon">💤</div>
+        <h1>Sleep Hours Prediction</h1>
+        <p class="subtitle">
+          Enter your daily activities to predict your sleep hours and generate
+          health report
+        </p>
+      </div>
+
+      <div class="info-cards">
+        <div class="info-card">
+          <div class="info-card-icon">🤖</div>
+          <div class="info-card-text">AI-Powered Prediction</div>
+        </div>
+        <div class="info-card">
+          <div class="info-card-icon">📊</div>
+          <div class="info-card-text">Health Report</div>
+        </div>
+      </div>
+
+      <form method="post" action="{{ url_for('predict') }}">
+        <div class="form-group">
+          <label>Age (years)</label>
+          <input
+            type="number"
+            step="1"
+            name="age"
+            placeholder="e.g., 23"
+            min="1"
+            max="120"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label>Workout Time (hours/day)</label>
+          <input
+            type="number"
+            step="0.1"
+            name="workout"
+            placeholder="e.g., 1.5"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label>Reading Time (hours/day)</label>
+          <input
+            type="number"
+            step="0.1"
+            name="reading"
+            placeholder="e.g., 0.5"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label>Phone Time (hours/day)</label>
+          <input
+            type="number"
+            step="0.1"
+            name="phone"
+            placeholder="e.g., 3.0"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label>Work Hours (hours/day)</label>
+          <input
+            type="number"
+            step="0.1"
+            name="work"
+            placeholder="e.g., 8.0"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label>Caffeine Intake (mg/day)</label>
+          <input
+            type="number"
+            step="1"
+            name="caffeine"
+            placeholder="e.g., 200"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label>Relaxation Time (hours/day)</label>
+          <input
+            type="number"
+            step="0.1"
+            name="relax"
+            placeholder="e.g., 1.0"
+            required
+          />
+        </div>
+
+        <input type="submit" value="🔮 Generate Health Report" />
+      </form>
+
+      {% if prediction is not none %}
+      <div class="result">
+        <div style="font-size: 0.9em; margin-top: 10px; opacity: 0.9">
+          Get your personalized sleep health report!
+        </div>
+      </div>
+      {% endif %}
+
+      <div class="dashboard-link">
+        <a href="{{ url_for('dashboard') }}">View Dashboard</a>
+      </div>
+    </div>
+  </body>
+</html>

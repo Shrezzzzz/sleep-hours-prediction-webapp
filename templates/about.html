@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About - Sleep Time Predictor</title>
+  <style>
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      background: #f7f3ef;
+      color: #4b3f35;
+    }
+
+    nav {
+      background: #fff;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      padding: 1em 5%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    nav h2 {
+      color: #5c4033;
+      font-weight: 700;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 1.8em;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: #5c4033;
+      font-weight: 500;
+    }
+
+    nav a:hover {
+      color: #8b5e3c;
+    }
+
+    .container {
+      max-width: 850px;
+      margin: 3em auto;
+      background: #fff;
+      padding: 3em;
+      border-radius: 18px;
+      box-shadow: 0 5px 16px rgba(0,0,0,0.08);
+    }
+
+    h1 {
+      color: #3b2f2f;
+    }
+
+    h2 {
+      color: #5c4033;
+      margin-top: 1.5em;
+    }
+
+    p {
+      color: #6b584d;
+      line-height: 1.7;
+    }
+
+    ul {
+      margin-top: 1em;
+      line-height: 1.8;
+    }
+
+    .button {
+      display: inline-block;
+      background: #5c4033;
+      color: #fff;
+      padding: 0.9em 2em;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: 600;
+      margin-top: 1.8em;
+      transition: all 0.3s ease;
+    }
+
+    .button:hover {
+      background: #7a523b;
+      transform: translateY(-3px);
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <h2>🌙 Sleep Time Predictor</h2>
+      <ul>
+        <li><a href="{{ url_for('index') }}">Home</a></li>
+        <li><a href="{{ url_for('about') }}">About</a></li>
+        <li><a href="{{ url_for('home') }}">Predict</a></li>
+        <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+        {% if 'username' in session %}
+          <li><a href="{{ url_for('logout') }}">Logout</a></li>
+        {% else %}
+          <li><a href="{{ url_for('login') }}">Login</a></li>
+        {% endif %}
+      </ul>
+  </nav>
+
+  <div class="container">
+    <h1>About This Project</h1>
+    <p>
+      Sleep Time Predictor helps you understand how daily habits affect sleep duration using machine learning.
+      By analyzing your activities — like screen time, caffeine, and exercise — it gives a personalized prediction.
+    </p>
+
+    <h2>Data-Driven Approach</h2>
+    <p>
+      Our regression model identifies correlations between daily habits and sleep.
+      It helps users make informed choices to improve sleep health.
+    </p>
+
+    <h2>Benefits of Tracking Your Habits</h2>
+    <ul>
+      <li>✅ Understand which habits affect your sleep positively or negatively.</li>
+      <li>✅ Make data-informed decisions about your lifestyle.</li>
+      <li>✅ Identify patterns that improve sleep quality.</li>
+      <li>✅ Optimize your daily routine for better rest.</li>
+    </ul>
+
+    <a href="{{ url_for('home') }}" class="button">Try the Predictor</a>
+    <a href="{{ url_for('index') }}" class="button">Return Home</a>
+  </div>
+</body>
+</html>

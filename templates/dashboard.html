@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sleep Health Report</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f7f3ee;
+    min-height: 100vh;
+    padding: 20px;
+  }
+  .dashboard-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(92, 64, 51, 0.1);
+    padding: 40px;
+    animation: fadeIn 0.5s ease-in;
+  }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  .header { text-align: center; margin-bottom: 30px; }
+  .header h1 { color: #5c4033; font-size: 2em; margin-bottom: 5px; }
+  .header .date { color: #8b6e56; font-size: 0.95em; }
+  .score-section { text-align: center; margin: 40px 0; }
+  .score-circle {
+    width: 200px; height: 200px; margin: 0 auto; border-radius: 50%;
+    background: linear-gradient(135deg, #a7d49b 0%, #7cb774 100%);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    box-shadow: 0 10px 20px rgba(160, 200, 150, 0.3); animation: pulse 2s ease-in-out infinite;
+  }
+  .score-circle.medium {
+    background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+    box-shadow: 0 10px 25px rgba(253, 160, 133, 0.3);
+  }
+  .score-circle.low {
+    background: linear-gradient(135deg, #f7797d 0%, #fbd786 100%);
+    box-shadow: 0 10px 25px rgba(247, 121, 125, 0.3);
+  }
+  @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+  .score-number { font-size: 4em; font-weight: bold; color: white; line-height: 1; }
+  .score-label { font-size: 1.2em; color: white; opacity: 0.9; }
+  .metrics-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 20px; margin: 40px 0;
+  }
+  .metric-card {
+    background: #fcf9f6; padding: 20px; border-radius: 12px; text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .metric-card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.08); }
+  .metric-label { color: #8b6e56; font-size: 0.9em; margin-bottom: 10px; font-weight: 500; }
+  .metric-value { color: #5c4033; font-size: 1.8em; font-weight: bold; }
+  .chart-section { margin: 40px 0; padding: 30px; background: #fbf7f2; border-radius: 15px; }
+  .chart-title { text-align: center; color: #5c4033; font-size: 1.5em; margin-bottom: 20px; font-weight: 600; }
+  .chart-container { max-width: 600px; margin: 0 auto; height: 400px; }
+  .recommendations-section { margin: 40px 0; }
+  .recommendations-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px; margin-top: 20px;
+  }
+  .recommendation-card {
+    background: #fcf9f6; padding: 25px; border-radius: 12px; border-left: 4px solid #b08b67;
+    transition: transform 0.3s ease;
+  }
+  .recommendation-card:hover { transform: translateX(5px); }
+  .recommendation-title { color: #5c4033; font-size: 1.1em; font-weight: 600; margin-bottom: 10px; }
+  .recommendation-message { color: #8b6e56; font-size: 0.95em; line-height: 1.6; }
+  .nav-buttons { display: flex; justify-content: center; gap: 20px; margin-top: 40px; }
+  .btn {
+    padding: 15px 40px; background: linear-gradient(135deg, #8b6e56 0%, #5c4033 100%);
+    color: white; text-decoration: none; border-radius: 50px; font-weight: 600;
+    font-size: 1.1em; transition: all 0.3s ease; box-shadow: 0 5px 15px rgba(92,64,51,0.2);
+    display: inline-block;
+  }
+  .btn:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(92,64,51,0.3); }
+  .error-message { text-align: center; padding: 40px; color: #8b6e56; }
+  .error-message h2 { color: #f7797d; margin-bottom: 20px; }
+  @media (max-width: 768px) {
+    .dashboard-container { padding: 20px; }
+    .metrics-grid { grid-template-columns: repeat(2, 1fr); }
+    .score-circle { width: 150px; height: 150px; }
+    .score-number { font-size: 3em; }
+    .recommendations-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+  <div class="dashboard-container">
+    {% if health_metrics %}
+    <div class="header">
+      <h1>Your Sleep Health Report</h1>
+      <p class="date">Generated on {{ health_metrics.timestamp }}</p>
+    </div>
+
+    <div class="score-section">
+      {% if health_metrics.health_score >= 80 %}
+      <div class="score-circle">
+      {% elif health_metrics.health_score >= 60 %}
+      <div class="score-circle medium">
+      {% else %}
+      <div class="score-circle low">
+      {% endif %}
+        <div class="score-number">{{ health_metrics.health_score }}</div>
+        <div class="score-label">Score</div>
+      </div>
+    </div>
+
+    <div class="metrics-grid">
+      <div class="metric-card"><div class="metric-label">Age</div><div class="metric-value">{{ health_metrics.age }} years</div></div>
+      <div class="metric-card"><div class="metric-label">Sleep Duration</div><div class="metric-value">{{ health_metrics.sleep_duration }}h</div></div>
+      <div class="metric-card"><div class="metric-label">Activity Level</div><div class="metric-value">{{ health_metrics.activity_level }}/10</div></div>
+      <div class="metric-card"><div class="metric-label">Stress Level</div><div class="metric-value">{{ health_metrics.stress_level }}/10</div></div>
+      <div class="metric-card"><div class="metric-label">Heart Rate</div><div class="metric-value">{{ health_metrics.heart_rate }} bpm</div></div>
+      <div class="metric-card"><div class="metric-label">Blood Pressure</div><div class="metric-value">{{ health_metrics.blood_pressure }}</div></div>
+    </div>
+
+    <div class="chart-section">
+      <h2 class="chart-title">Sleep Health Factors Comparison</h2>
+      <div class="chart-container"><canvas id="radarChart"></canvas></div>
+    </div>
+
+    <div class="recommendations-section">
+      <div class="recommendations-grid">
+        {% for rec in health_metrics.recommendations %}
+        <div class="recommendation-card">
+          <div class="recommendation-title">{{ rec.title }}</div>
+          <div class="recommendation-message">{{ rec.message }}</div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+
+    <div class="nav-buttons">
+      <a href="{{ url_for('index') }}" class="btn">🧠 Return Home</a>
+      <a href="{{ url_for('home') }}" class="btn">🏠 New Assessment</a>
+    </div>
+
+    <!-- Safely embed JSON data -->
+    <script id="health-data" type="application/json">
+      {{ health_metrics | tojson | safe }}
+    </script>
+
+    <script>
+      const dataElement = document.getElementById("health-data");
+      const metrics = dataElement ? JSON.parse(dataElement.textContent || "{}") : {};
+
+      if (metrics && Object.keys(metrics).length > 0) {
+        const ctx = document.getElementById('radarChart').getContext('2d');
+        const sleepDuration = metrics.sleep_duration || 0;
+        const activityLevel = metrics.activity_level || 0;
+        const stressLevel = 10 - (metrics.stress_level || 0);
+        const heartRate = metrics.heart_rate || 0;
+
+        const normalizedHeartRate = Math.max(0, Math.min(10, 10 - ((heartRate - 40) / 60) * 10));
+        let normalizedSleep = 0;
+        if (sleepDuration >= 7 && sleepDuration <= 9) normalizedSleep = 10;
+        else if (sleepDuration < 7) normalizedSleep = (sleepDuration / 7) * 10;
+        else normalizedSleep = Math.max(0, 10 - ((sleepDuration - 9) / 3) * 10);
+
+        new Chart(ctx, {
+          type: 'radar',
+          data: {
+            labels: ['Sleep Duration', 'Activity Level', 'Stress Level', 'Heart Rate'],
+            datasets: [{
+              label: 'Your Values',
+              data: [normalizedSleep, activityLevel, stressLevel, normalizedHeartRate],
+              backgroundColor: 'rgba(102,126,234,0.2)',
+              borderColor: 'rgba(102,126,234,1)',
+              borderWidth: 2
+            }, {
+              label: 'Optimal Range',
+              data: [10, 8, 8, 8],
+              backgroundColor: 'rgba(81,207,102,0.2)',
+              borderColor: 'rgba(81,207,102,1)',
+              borderWidth: 2
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            scales: { r: { beginAtZero: true, max: 10 } },
+            plugins: { legend: { position: 'bottom' } }
+          }
+        });
+      } else {
+        console.warn("⚠️ No health metrics found — chart not rendered.");
+      }
+    </script>
+
+    {% else %}
+    <div class="error-message">
+      <h2>⚠️ No Health Data Available</h2>
+      <p>{{ error if error else "Please complete the health assessment first to view your report." }}</p>
+      <div class="nav-buttons">
+        <a href="{{ url_for('index') }}" class="btn">🏠 Start Assessment</a>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</body>
+</html>

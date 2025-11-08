@@ -1,0 +1,153 @@
+body {
+    background: #f2f8ff;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+.container {
+    background: #fff;
+    max-width: 450px;
+    margin: 40px auto;
+    box-shadow: 0 6px 28px 0 rgba(70, 128, 255, 0.13);
+    border-radius: 14px;
+    padding: 2em 2.5em;
+}
+h1 {
+    color: #1976d2;
+    text-align: center;
+    margin-bottom: 1.5em;
+}
+label {
+    font-weight: 600;
+    color: #222;
+}
+input[type=number] {
+    width: 100%;
+    padding: 0.55em;
+    border-radius: 7px;
+    border: 1px solid #b3c6e1;
+    margin-bottom: 1.15em;
+    font-size: 1em;
+}
+button, input[type=submit] {
+    background: #1976d2;
+    color: #fff;
+    border: none;
+    padding: 0.8em 2em;
+    border-radius: 8px;
+    font-size: 1.08em;
+    cursor: pointer;
+    margin-top: 0.3em;
+    transition: background 0.2s;
+}
+button:hover, input[type=submit]:hover {
+    background: #1256a3;
+}
+.result {
+    background: #e3f6cf;
+    color: #234f19;
+    font-weight: 700;
+    border-radius: 8px;
+    padding: 1em;
+    text-align: center;
+    margin-top: 1.2em;
+    font-size: 1.25em;
+}
+
+.password-wrapper input {
+    padding-right: 36px;
+}
+
+.login-card {
+    background: #fff;
+    max-width: 400px;   /* <--- Change 400px to 500px or higher */
+    margin: 60px auto;
+    box-shadow: 0 10px 32px rgba(25, 118, 210, 0.15);
+    border-radius: 18px;
+    padding: 2.5em 2.3em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.top-right-link {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.top-right-link a {
+    color: #1976d2;
+    font-weight: 500;
+    font-size: 1.1em;
+    background: #e3f0fc;
+    padding: 7px 17px;
+    border-radius: 7px;
+    text-decoration: none;
+    box-shadow: 0 1px 4px 0 rgba(25, 118, 210, 0.08);
+    transition: background 0.13s, color 0.13s;
+}
+.top-right-link a:hover {
+    background: #1976d2;
+    color: #fff;
+}
+
+html, body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    background: #f2f8ff;
+}
+
+.dashboard-flex {
+    display: flex;
+    flex-direction: row;
+    height: 98vh;
+    width: 98vw;
+    box-sizing: border-box;
+    align-items: stretch;
+}
+
+.dashboard-left {
+    flex: 1 1 60%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* optional: add background */
+    background: #fff;
+    padding: 2em 1em 2em 2em;
+}
+
+.dashboard-left img {
+    width: 96%;
+    height: 88vh;
+    object-fit: contain;
+    box-shadow: 0 2px 16px rgba(25,118,210,0.10);
+}
+
+.dashboard-right {
+    flex: 1 1 40%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    background: #fff;
+    padding: 2em 2em 2em 1em;
+    overflow: auto;
+}
+
+.dashboard-right table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 1em;
+}
+
+.dashboard-right th, .dashboard-right td {
+    padding: 0.6em 0.7em;
+    border: 1px solid #d5e0f7;
+    text-align: center;
+}
+
+/* Makes the page absolutely fill available screen! */
+
